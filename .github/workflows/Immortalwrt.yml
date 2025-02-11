@@ -10,7 +10,7 @@ on:
       REPO_BRANCH:
         description: '天灵源码-请选择分支'
         required: true
-        default: 'openwrt-21.02'
+        default: 'openwrt-23.05'
         type: choice
         options:
           - 'openwrt-23.05'
@@ -39,7 +39,7 @@ on:
       INFORMATION_NOTICE:
         description: 'Telegram或pushplus信息通知'
         required: true
-        default: '关闭'
+        default: 'Telegram'
         type: choice
         options:
           - '关闭'
@@ -63,7 +63,7 @@ on:
       CACHEWRTBUILD_SWITCH:
         description: '缓存加速编译'
         required: false
-        default: 'true'
+        default: 'false'
         type: boolean
       UPDATE_FIRMWARE_ONLINE:
         description: '增加在线更新固件功能/自动打包Amlogic_Rockchip系列固件'
@@ -121,7 +121,8 @@ jobs:
         fi
     
     - name: 准备结束
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+    
 
     - name: 检测文件和对比上游版本
       run: |
@@ -158,6 +159,7 @@ jobs:
         ln -sf /${{ env.DIY_WORK }}/openwrt ${GITHUB_WORKSPACE}/openwrt
         cp -Rf ${GITHUB_WORKSPACE}/build ${GITHUB_WORKSPACE}/openwrt/build
         chmod -R +x ${GITHUB_WORKSPACE}/openwrt/build
+        
     
     - name: 公 告
       if: env.REPO_TOKEN
@@ -165,7 +167,8 @@ jobs:
         cd ${GITHUB_WORKSPACE}
         cd openwrt
         source ${BUILD_PATH}/common.sh && Diy_menu2
- 
+
+
     - name: 更新插件源
       if: env.REPO_TOKEN
       run: |
